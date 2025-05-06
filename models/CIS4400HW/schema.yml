@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: HOMEWORK
-    schema: homework  # Must match your Snowflake schema name
+    schema: homework 
     tables:
       - name: DIM_COMPANY_ID
       - name: DIM_DATE
