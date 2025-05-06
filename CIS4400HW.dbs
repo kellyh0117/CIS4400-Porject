@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="hw1" database="LogicalDesign" id="LogicalDesign-dd9" >
+	<schema name="hw1" >
+		<table name="Dim_Calendar" prior="dim_Calendar" >
+			<column name="FIling_Date_Received" type="DATE" jt="91" mandatory="y" />
+			<column name="End Date" type="DATE" jt="91" />
+			<column name="Start_Date" prior="Start_date" type="DATE" jt="91" mandatory="y" />
+			<column name="Year_Number" prior="Year Number" type="INT" jt="4" mandatory="y" />
+			<column name="Monther_Number" prior="Monther Number" type="INT" jt="4" mandatory="y" />
+			<column name="Day_Number" prior="Day Number" type="INT" jt="4" mandatory="y" />
+			<column name="Date_Type" prior="date_Type" type="DATE" jt="91" />
+			<column name="Duation" type="INT" jt="4" />
+			<index name="pk_dim_Calendar" unique="PRIMARY_KEY" >
+				<column name="FIling_Date_Received" />
+			</index>
+		</table>
+		<table name="Dim_Company" prior="Company" >
+			<column name="Company_Name" prior="Company Name" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="Record_Type" prior="Record Type" type="VARCHAR" length="100" jt="12" />
+			<column name="Filing_ID" type="INT" jt="4" />
+			<index name="pk_Entity" unique="PRIMARY_KEY" >
+				<column name="Company_Name" />
+			</index>
+		</table>
+		<table name="Dim_Location" prior="Location" >
+			<column name="Address_1" prior="Address 1" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="Address_2" type="VARCHAR" length="100" jt="12" />
+			<column name="City" type="VARCHAR" length="100" jt="12" />
+			<column name="State" type="VARCHAR" length="100" jt="12" />
+			<column name="Zip_Code" prior="Zip Code" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Location" unique="PRIMARY_KEY" >
+				<column name="Address_1" />
+			</index>
+		</table>
+		<table name="TAX_COMPANY" prior="Insurance" >
+			<column name="Filing_ID" prior="Filing ID" type="INT" jt="4" mandatory="y" />
+			<column name="Filing_Date_Received" prior="Filing Date Received" type="DATE" jt="91" />
+			<column name="Company_Name" prior="Company Name" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="Address_1" prior="Address 1" type="TEXT" jt="-1" mandatory="y" />
+			<column name="Address_2" prior="Address 2" type="TEXT" jt="-1" mandatory="y" />
+			<column name="City" type="TEXT" jt="-1" mandatory="y" />
+			<column name="State" type="TEXT" jt="-1" mandatory="y" />
+			<column name="Zip_Code" prior="Zip Code" type="TEXT" jt="-1" mandatory="y" />
+			<column name="Date_Type" prior="Date Type" type="TEXT" jt="-1" mandatory="y" />
+			<column name="Start_Date" prior="Start Date" type="DATE" jt="91" />
+			<column name="End_Date" prior="End Date" type="DATE" jt="91" mandatory="y" />
+			<column name="Duration" prior="Period" type="INT" jt="4" mandatory="y" />
+			<fk name="fk_Insurance_Company" to_schema="hw1" to_table="Dim_Company" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Company_Name" pk="Company_Name" />
+			</fk>
+			<fk name="fk_Insurance_Location" to_schema="hw1" to_table="Dim_Location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Address_1" pk="Address_1" />
+			</fk>
+			<fk name="fk_Insurance_dim_Calendar" to_schema="hw1" to_table="Dim_Calendar" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Filing_Date_Received" pk="FIling_Date_Received" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Diagram" id="Diagram-228a" show_relation="columns" >
+		<entity schema="hw1" name="Dim_Location" color="C1D8EE" x="760" y="160" />
+		<entity schema="hw1" name="Dim_Company" color="C1D8EE" x="160" y="160" />
+		<entity schema="hw1" name="TAX_COMPANY" color="C1D8EE" x="440" y="180" />
+		<entity schema="hw1" name="Dim_Calendar" color="C1D8EE" x="720" y="340" />
+		<callout x="60" y="60" pointer="Round" >
+			<comment><![CDATA[- Create new entities by right-clicking the diagram. 
+- Double-click entity headers to edit.
+- Get a better understanding of the schema by creating multiple diagrams.
+- Convert the logical design to physical design and deploy it into the database.]]></comment>
+		</callout>
+	</layout>
+</project>
