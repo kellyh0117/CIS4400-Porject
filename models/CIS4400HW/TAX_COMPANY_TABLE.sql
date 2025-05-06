@@ -1,4 +1,3 @@
--- models/my_model.sql
 
 SELECT *
 FROM {{ source('HOMEWORK', 'DIM_COMPANY_ID') }} AS dc
