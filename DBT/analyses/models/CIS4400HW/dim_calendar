@@ -1,0 +1,12 @@
+
+SELECT DISTINCT
+  filing_date_received,
+  SAFE_CAST(start_date AS DATE) AS start_date,
+  SAFE_CAST(end_date AS DATE) AS end_date,
+  EXTRACT(YEAR FROM SAFE_CAST(filing_date_received AS DATE)) AS year_number,
+  EXTRACT(MONTH FROM SAFE_CAST(filing_date_received AS DATE)) AS month_number,
+  EXTRACT(DAY FROM SAFE_CAST(filing_date_received AS DATE)) AS day_number,
+  date_type,
+  DATE_DIFF(SAFE_CAST(end_date AS DATE), SAFE_CAST(start_date AS DATE), DAY) AS duration
+FROM {{ ref('stg_workers_comp') }}
+WHERE filing_date_received IS NOT NULL

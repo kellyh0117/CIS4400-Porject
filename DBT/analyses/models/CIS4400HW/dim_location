@@ -1,0 +1,9 @@
+
+SELECT DISTINCT
+  address_1,
+  address_2,
+  city,
+  state,
+  zip_code
+FROM {{ ref('stg_workers_comp') }}
+WHERE address_1 IS NOT NULL
