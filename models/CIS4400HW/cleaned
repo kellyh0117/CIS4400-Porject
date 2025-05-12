@@ -1,0 +1,36 @@
+-- models/clean_workers_comp.sql
+
+WITH raw_data AS (
+  SELECT * 
+  FROM {{ source('your_dataset', 'workers_compensation_raw') }}
+)
+
+SELECT
+  filing_id,
+  -- Format date fields
+  PARSE_DATE('%Y-%m-%d', FORMAT_DATE('%Y-%m-%d', SAFE_CAST(filing_date_received AS DATE))) AS filing_date_received,
+  
+  -- Clean company name
+  UPPER(TRIM(company_name)) AS company_name,
+  
+  -- Clean address fields
+  UPPER(TRIM(address_1)) AS address_1,
+  UPPER(TRIM(address_2)) AS address_2,
+  UPPER(TRIM(city)) AS city,
+  UPPER(TRIM(state)) AS state,
+  TRIM(zip_code) AS zip_code,
+
+  -- Format start/end dates and calculate duration
+  PARSE_DATE('%Y-%m-%d', FORMAT_DATE('%Y-%m-%d', SAFE_CAST(start_date AS DATE))) AS start_date,
+  PARSE_DATE('%Y-%m-%d', FORMAT_DATE('%Y-%m-%d', SAFE_CAST(end_date AS DATE))) AS end_date,
+  DATE_DIFF(SAFE_CAST(end_date AS DATE), SAFE_CAST(start_date AS DATE), DAY) AS duration_days,
+
+  -- Add year, month, quarter
+  EXTRACT(YEAR FROM SAFE_CAST(start_date AS DATE)) AS year,
+  EXTRACT(MONTH FROM SAFE_CAST(start_date AS DATE)) AS month,
+  EXTRACT(QUARTER FROM SAFE_CAST(start_date AS DATE)) AS quarter
+
+FROM raw_data
+WHERE filing_id IS NOT NULL
+  AND company_name IS NOT NULL
+  AND start_date IS NOT NULL

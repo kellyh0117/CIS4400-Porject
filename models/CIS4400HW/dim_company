@@ -1,0 +1,8 @@
+
+SELECT DISTINCT
+  company_name,
+  record_type,
+  filing_id
+FROM {{ ref('stg_workers_comp') }}
+WHERE company_name IS NOT NULL
+dbt run
