@@ -1,69 +1,154 @@
-CIS4400 Cloud Data Pipeline Project – Workers' Compensation Analytics
-Dataset: [Texas Workers' Compensation Non-Subscriber Employer Info](https://data.texas.gov/dataset/Workers-compensation-non-subscriber-employer-infor/azae-8krr)
+TEXAS WORKERS’ COMPENSATION DATA WAREHOUSE SETUP – CIS 4400 PROJECT
+Group 4 – Baruch College, Spring 2025
+Professor: Jefferson Bien-Aime
+Prepared by: Kelly Huang
 
+Project Objectives
+Design a relational data warehouse schema to analyze employer participation in Texas workers’ compensation.
 
-Project Overview
+Identify companies with the highest number of non-subscriber filings.
 
-This project focuses on analyzing a real-world dataset of employers in Texas who have opted out of providing workers’ compensation coverage. The goal was to build a cloud-based data pipeline that could collect, clean, transform, and visualize this data using modern tools. The project covers everything from data sourcing and storage to transformation, modeling, and interactive dashboard reporting.
+Create a centralized and clean data model for efficient business reporting.
 
+Support business users with visual insights using BI tools like Tableau or Looker Studio.
 
+Business Requirements
+Analyze which companies have the highest number of people without Texas workers’ compensation coverage.
 
-Dataset Description
+Track filings over time by location and company name.
 
-The dataset includes the following key information:
-- `filing_id`: Unique ID for each filing
-- `filing_date_received`: Date the filing was received
-- `company_name`: Name of the employer
-- `address`, `city`, `state`, `zip_code`: Location details
-- `start_date` and `end_date`and `duation`: Period during which the company opted out
-- `record_type` and `date_type`: Additional metadata about the filing
-These fields were used to assess the duration of non-coverage, identify trends, and compare opt-out behavior across companies, ZIP codes, and time.
+Compare non-subscriber trends across different states and years.
 
-Project Workflow
+Visualize the data to support public policy decisions and business analysis.
 
-1. Data Sourcing & Storage
-- Data was downloaded from the Texas Open Data Portal.
-- Uploaded into Snowflake, a cloud data warehouse platform.
-- Created a structured table to store the raw data.
+Data Model Overview
+The data warehouse is built around a central fact table, FACT_TAX_COMPANY, which stores key filing and coverage details. It links to three dimension tables:
 
-2. Data Cleaning & Transformation (DBT)
-- Used DBT (Data Build Tool) to:
-  - Clean the raw data
-  - Standardize date formats (to `YYYY-MM-DD`)
-  - Remove duplicate records
-  - Handle null values
-  - Calculate the duration between `start_date` and `end_date`
-  - Extract date parts like `year`, `month`, and `quarter`
-- Created reusable DBT models for cleaned data and fact tables.
+DIM_COMPANY (company metadata)
 
-3. Data Modeling
-- Designed a star schema within Snowflake:
-  - Fact Table: Stores durations and keys to dimension tables
-  - Dimension Tables: Includes company and date breakdowns
-- Used surrogate keys for relationships between tables
+DIM_LOCATION (geographic context)
 
-4. Data Visualization (Tableau)
-- Connected Tableau directly to Snowflake
-- Created a live, interactive dashboard with:
-  - Pie chart to compare companies
-  - Bar chart by ZIP code
-  - Line chart to show changes over time
-  - Heat map to explore duration by company and state
-  - Filter controls for date and location
+DIM_CALENDAR (time context)
 
----
-Tools Used
+All foreign key relationships ensure referential integrity and efficient analytics.
 
-| Tool       | Purpose                           |
-|------------|-----------------------------------|
-| Snowflake  | Cloud data warehouse and storage  |
-| DBT        | Data transformation and modeling  |
-| Tableau    | Data visualization and dashboard  |
-| SQL        | Query language for data handling  |
-| GitHub     | Version control and documentation |
+Fact Table: FACT_TAX_COMPANY
+Captures all measurable and transactional filing records.
 
+Key Columns:
 
-Project Outcome
+Filing_ID (Primary Key)
 
-This project resulted in a full end-to-end cloud data pipeline. I was able to transform raw government data into meaningful insights using DBT and Snowflake, then visualize the results using Tableau. It reinforced my understanding of cloud storage, data modeling, ETL pipelines, and real-time reporting.
+Filing_Date_Received (FK to DIM_CALENDAR)
+
+Company_Name (FK to DIM_COMPANY)
+
+Address_1 (FK to DIM_LOCATION)
+
+Address_2, City, State, Zip_Code
+
+Start_Date, End_Date, Date_Type
+
+Duration (calculated from Start and End Date)
+
+Dimension Tables
+DIM_COMPANY
+Describes employers and their filing records.
+
+Company_Name (PK)
+
+Record_Type (Parent or Location)
+
+Filing_ID (optional FK to fact)
+
+DIM_LOCATION
+Stores normalized location data.
+
+Address_1 (PK)
+
+Address_2, City, State, Zip_Code
+
+DIM_CALENDAR
+Time dimension for historical tracking.
+
+Filing_Date_Received (PK)
+
+Start_Date, End_Date, Date_Type, Duration
+
+Year_Number, Month_Number, Day_Number
+
+Information Architecture
+The fact table is joined with dimensions to enable analysis by time, company, and geography.
+
+Clear, descriptive field names (e.g., Filing_Date_Received, not fdr)
+
+Duration is derived for time span analysis
+
+Pre-built views enable users to track filings by year and by top companies
+
+Example view: Annual_NonSubscriber_Report_View
+
+ETL/Data Integration Process
+Source: Texas Open Data Portal
+Link to Dataset
+
+Steps:
+
+Gather: Import CSV data
+
+Clean: Remove duplicates, fix inconsistent formats
+
+Transform:
+
+Extract Duration (days between Start_Date and End_Date)
+
+Normalize company and location fields
+
+Standardize date formats
+
+Load: Push into FACT_TAX_COMPANY and linked dimensions
+
+Store: Save final dataset in cloud-based data warehouse (e.g., Snowflake)
+
+Technical Architecture
+Programming: Python (Pandas, NumPy)
+
+Data Storage: Cloud DB (e.g., Snowflake or BigQuery)
+
+ETL Tools: DBT or Python scripts
+
+BI Tools: Tableau, Power BI, or Looker Studio
+
+Partitioning: By Filing_Date_Received for performance
+
+Business Use Cases
+Identify companies with the most non-subscriber filings
+
+Monitor trends by year, city, and company
+
+Highlight states with high rates of non-coverage
+
+Visual dashboards for stakeholder communication
+
+Governance & Quality
+Remove duplicate records
+
+Ensure Filing_ID uniqueness
+
+Add audit columns for processing timestamp
+
+Validate date fields and missing values
+
+BI Integration
+Dashboards:
+
+Top 10 Non-Subscriber Companies
+
+Yearly Filing Trends
+
+State-Level Non-Participation Heatmap
+
+Filters: Company Name, Filing Year, State
+
+Prebuilt Reports: Company Risk Profile, Non-Subscriber Trends
 
