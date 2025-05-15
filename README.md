@@ -109,9 +109,9 @@ The fact table is joined with dimensions to enable analysis by time, company, an
 ### **Technical Architecture**
 
 * **Programming**: Python (Pandas, NumPy)
-* **Data Storage**: Cloud DB (e.g., Snowflake or BigQuery)
-* **ETL Tools**: DBT or Python scripts
-* **BI Tools**: Tableau, Power BI, or Looker Studio
+* **Data Storage**: Snowflake
+* **ETL Tools**: DBT
+* **BI Tools**: Tableau
 * **Partitioning**: By `Filing_Date_Received` for performance
 
 ---
