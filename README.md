@@ -144,5 +144,6 @@ The fact table is joined with dimensions to enable analysis by time, company, an
 * **Filters**: Company Name, Filing Year, State
 * **Prebuilt Reports**: Company Risk Profile, Non-Subscriber Trends
 
----
+![image](https://github.com/user-attachments/assets/b8c3842a-19c9-47fc-8770-600866db990b)
+
 
